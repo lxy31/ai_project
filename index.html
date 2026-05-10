@@ -660,20 +660,50 @@
       flex-wrap: wrap;
     }
 
+    .review-carousel {
+      overflow: hidden;
+      padding: 4px 0 18px;
+      -webkit-mask-image: linear-gradient(90deg, transparent, #000 7%, #000 93%, transparent);
+      mask-image: linear-gradient(90deg, transparent, #000 7%, #000 93%, transparent);
+    }
+
     .reviews {
-      display: grid;
-      grid-template-columns: repeat(3, minmax(0, 1fr));
+      width: max-content;
+      display: flex;
       gap: 18px;
+      animation: review-scroll 42s linear infinite;
+      will-change: transform;
+    }
+
+    .review-carousel:hover .reviews {
+      animation-play-state: paused;
     }
 
     .review-card {
+      width: clamp(286px, 30vw, 372px);
+      min-height: 252px;
       padding: 22px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
     }
 
     .stars {
       color: #d9981d;
       font-weight: 900;
       letter-spacing: 0;
+    }
+
+    .review-tag {
+      display: inline-flex;
+      align-items: center;
+      min-height: 30px;
+      padding: 0 10px;
+      color: var(--mint-dark);
+      background: #e6f4f1;
+      border-radius: 999px;
+      font-size: 13px;
+      font-weight: 800;
     }
 
     .reviewer {
@@ -693,6 +723,16 @@
       background: var(--blue);
       border-radius: 50%;
       font-size: 15px;
+    }
+
+    @keyframes review-scroll {
+      from {
+        transform: translateX(0);
+      }
+
+      to {
+        transform: translateX(calc(-50% - 9px));
+      }
     }
 
     footer {
@@ -731,9 +771,12 @@
       }
 
       .service-grid,
-      .price-grid,
-      .reviews {
+      .price-grid {
         grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+
+      .review-card {
+        width: clamp(280px, 44vw, 360px);
       }
 
       .section-head {
@@ -770,9 +813,20 @@
       }
 
       .service-grid,
-      .price-grid,
-      .reviews {
+      .price-grid {
         grid-template-columns: 1fr;
+      }
+
+      .review-carousel {
+        width: calc(100% + 28px);
+        margin-left: -14px;
+        -webkit-mask-image: linear-gradient(90deg, transparent, #000 9%, #000 91%, transparent);
+        mask-image: linear-gradient(90deg, transparent, #000 9%, #000 91%, transparent);
+      }
+
+      .review-card {
+        width: min(82vw, 328px);
+        min-height: 274px;
       }
 
       .section {
@@ -805,6 +859,19 @@
 
       .store-map {
         min-height: 330px;
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .reviews {
+        width: auto;
+        overflow-x: auto;
+        scroll-snap-type: x mandatory;
+        animation: none;
+      }
+
+      .review-card {
+        scroll-snap-align: center;
       }
     }
   </style>
@@ -940,22 +1007,169 @@
           <h2>家长最关心的到店反馈</h2>
           <p>先看洗后状态、胆小宠物配合度和造型沟通效果，再决定适合的洗护项目。</p>
         </div>
+        <div class="review-carousel" aria-label="客户评价轮播">
         <div class="reviews">
           <article class="review-card">
-            <div class="stars">★★★★★</div>
-            <p>我家柯基掉毛严重，洗完蓬松很多，店员还提醒了耳朵发红的问题。</p>
-            <div class="reviewer"><span class="avatar">周</span>Cookie 家长</div>
+            <div>
+              <div class="stars">★★★★★</div>
+              <p>我家柯基掉毛严重，洗完蓬松很多，店员还提醒了耳朵发红的问题。</p>
+            </div>
+            <div>
+              <span class="review-tag">柯基 · 换季护理</span>
+              <div class="reviewer"><span class="avatar">周</span>Cookie 家长</div>
+            </div>
           </article>
           <article class="review-card">
-            <div class="stars">★★★★★</div>
-            <p>猫咪比较胆小，预约了慢洗时段，全程没有强迫，回家状态也很稳定。</p>
-            <div class="reviewer"><span class="avatar">陈</span>奶盖 家长</div>
+            <div>
+              <div class="stars">★★★★★</div>
+              <p>猫咪比较胆小，预约了慢洗时段，全程没有强迫，回家状态也很稳定。</p>
+            </div>
+            <div>
+              <span class="review-tag">英短 · 慢洗时段</span>
+              <div class="reviewer"><span class="avatar">陈</span>奶盖 家长</div>
+            </div>
           </article>
           <article class="review-card">
-            <div class="stars">★★★★★</div>
-            <p>造型会先沟通照片，剪完很自然，脚底毛和指甲也处理得很细。</p>
-            <div class="reviewer"><span class="avatar">许</span>Momo 家长</div>
+            <div>
+              <div class="stars">★★★★★</div>
+              <p>造型会先沟通照片，剪完很自然，脚底毛和指甲也处理得很细。</p>
+            </div>
+            <div>
+              <span class="review-tag">泰迪 · 造型修剪</span>
+              <div class="reviewer"><span class="avatar">许</span>Momo 家长</div>
+            </div>
           </article>
+          <article class="review-card">
+            <div>
+              <div class="stars">★★★★★</div>
+              <p>第一次带金毛来洗，洗前会检查皮肤，吹干后毛很顺，香味也不是刺鼻的那种。</p>
+            </div>
+            <div>
+              <span class="review-tag">金毛 · 基础洗护</span>
+              <div class="reviewer"><span class="avatar">林</span>布丁 家长</div>
+            </div>
+          </article>
+          <article class="review-card">
+            <div>
+              <div class="stars">★★★★★</div>
+              <p>我最喜欢洗后反馈，会告诉我哪里有皮屑、哪里容易打结，回家护理更有方向。</p>
+            </div>
+            <div>
+              <span class="review-tag">比熊 · 皮毛养护</span>
+              <div class="reviewer"><span class="avatar">王</span>豆豆 家长</div>
+            </div>
+          </article>
+          <article class="review-card">
+            <div>
+              <div class="stars">★★★★★</div>
+              <p>接送很准时，洗完还发了照片确认。家里老人不用来回跑，省心很多。</p>
+            </div>
+            <div>
+              <span class="review-tag">小型犬 · 接送到店</span>
+              <div class="reviewer"><span class="avatar">沈</span>Lucky 家长</div>
+            </div>
+          </article>
+          <article class="review-card">
+            <div>
+              <div class="stars">★★★★★</div>
+              <p>猫狗分区让我安心，等待区没有很吵，猫咪回家没有躲一整天。</p>
+            </div>
+            <div>
+              <span class="review-tag">布偶 · 猫咪洗护</span>
+              <div class="reviewer"><span class="avatar">赵</span>糯米 家长</div>
+            </div>
+          </article>
+          <article class="review-card">
+            <div>
+              <div class="stars">★★★★★</div>
+              <p>之前毛结比较严重，店员没有硬扯，分段梳通后再洗，狗狗配合度明显好很多。</p>
+            </div>
+            <div>
+              <span class="review-tag">雪纳瑞 · 毛结梳通</span>
+              <div class="reviewer"><span class="avatar">唐</span>可乐 家长</div>
+            </div>
+          </article>
+          <article class="review-card" aria-hidden="true">
+            <div>
+              <div class="stars">★★★★★</div>
+              <p>我家柯基掉毛严重，洗完蓬松很多，店员还提醒了耳朵发红的问题。</p>
+            </div>
+            <div>
+              <span class="review-tag">柯基 · 换季护理</span>
+              <div class="reviewer"><span class="avatar">周</span>Cookie 家长</div>
+            </div>
+          </article>
+          <article class="review-card" aria-hidden="true">
+            <div>
+              <div class="stars">★★★★★</div>
+              <p>猫咪比较胆小，预约了慢洗时段，全程没有强迫，回家状态也很稳定。</p>
+            </div>
+            <div>
+              <span class="review-tag">英短 · 慢洗时段</span>
+              <div class="reviewer"><span class="avatar">陈</span>奶盖 家长</div>
+            </div>
+          </article>
+          <article class="review-card" aria-hidden="true">
+            <div>
+              <div class="stars">★★★★★</div>
+              <p>造型会先沟通照片，剪完很自然，脚底毛和指甲也处理得很细。</p>
+            </div>
+            <div>
+              <span class="review-tag">泰迪 · 造型修剪</span>
+              <div class="reviewer"><span class="avatar">许</span>Momo 家长</div>
+            </div>
+          </article>
+          <article class="review-card" aria-hidden="true">
+            <div>
+              <div class="stars">★★★★★</div>
+              <p>第一次带金毛来洗，洗前会检查皮肤，吹干后毛很顺，香味也不是刺鼻的那种。</p>
+            </div>
+            <div>
+              <span class="review-tag">金毛 · 基础洗护</span>
+              <div class="reviewer"><span class="avatar">林</span>布丁 家长</div>
+            </div>
+          </article>
+          <article class="review-card" aria-hidden="true">
+            <div>
+              <div class="stars">★★★★★</div>
+              <p>我最喜欢洗后反馈，会告诉我哪里有皮屑、哪里容易打结，回家护理更有方向。</p>
+            </div>
+            <div>
+              <span class="review-tag">比熊 · 皮毛养护</span>
+              <div class="reviewer"><span class="avatar">王</span>豆豆 家长</div>
+            </div>
+          </article>
+          <article class="review-card" aria-hidden="true">
+            <div>
+              <div class="stars">★★★★★</div>
+              <p>接送很准时，洗完还发了照片确认。家里老人不用来回跑，省心很多。</p>
+            </div>
+            <div>
+              <span class="review-tag">小型犬 · 接送到店</span>
+              <div class="reviewer"><span class="avatar">沈</span>Lucky 家长</div>
+            </div>
+          </article>
+          <article class="review-card" aria-hidden="true">
+            <div>
+              <div class="stars">★★★★★</div>
+              <p>猫狗分区让我安心，等待区没有很吵，猫咪回家没有躲一整天。</p>
+            </div>
+            <div>
+              <span class="review-tag">布偶 · 猫咪洗护</span>
+              <div class="reviewer"><span class="avatar">赵</span>糯米 家长</div>
+            </div>
+          </article>
+          <article class="review-card" aria-hidden="true">
+            <div>
+              <div class="stars">★★★★★</div>
+              <p>之前毛结比较严重，店员没有硬扯，分段梳通后再洗，狗狗配合度明显好很多。</p>
+            </div>
+            <div>
+              <span class="review-tag">雪纳瑞 · 毛结梳通</span>
+              <div class="reviewer"><span class="avatar">唐</span>可乐 家长</div>
+            </div>
+          </article>
+        </div>
         </div>
       </div>
     </section>

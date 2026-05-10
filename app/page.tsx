@@ -136,21 +136,56 @@ const reviews = [
   {
     text: "我家柯基掉毛严重，洗完蓬松很多，店员还提醒了耳朵发红的问题。",
     name: "Cookie 家长",
-    initial: "周"
+    initial: "周",
+    tag: "柯基 · 换季护理"
   },
   {
     text: "猫咪比较胆小，预约了慢洗时段，全程没有强迫，回家状态也很稳定。",
     name: "奶盖 家长",
-    initial: "陈"
+    initial: "陈",
+    tag: "英短 · 慢洗时段"
   },
   {
     text: "造型会先沟通照片，剪完很自然，脚底毛和指甲也处理得很细。",
     name: "Momo 家长",
-    initial: "许"
+    initial: "许",
+    tag: "泰迪 · 造型修剪"
+  },
+  {
+    text: "第一次带金毛来洗，洗前会检查皮肤，吹干后毛很顺，香味也不是刺鼻的那种。",
+    name: "布丁 家长",
+    initial: "林",
+    tag: "金毛 · 基础洗护"
+  },
+  {
+    text: "我最喜欢洗后反馈，会告诉我哪里有皮屑、哪里容易打结，回家护理更有方向。",
+    name: "豆豆 家长",
+    initial: "王",
+    tag: "比熊 · 皮毛养护"
+  },
+  {
+    text: "接送很准时，洗完还发了照片确认。家里老人不用来回跑，省心很多。",
+    name: "Lucky 家长",
+    initial: "沈",
+    tag: "小型犬 · 接送到店"
+  },
+  {
+    text: "猫狗分区让我安心，等待区没有很吵，猫咪回家没有躲一整天。",
+    name: "糯米 家长",
+    initial: "赵",
+    tag: "布偶 · 猫咪洗护"
+  },
+  {
+    text: "之前毛结比较严重，店员没有硬扯，分段梳通后再洗，狗狗配合度明显好很多。",
+    name: "可乐 家长",
+    initial: "唐",
+    tag: "雪纳瑞 · 毛结梳通"
   }
 ];
 
 export default function Home() {
+  const reviewLoop = [...reviews, ...reviews];
+
   return (
     <>
       <header className="topbar">
@@ -329,23 +364,34 @@ export default function Home() {
           </div>
         </section>
 
-        <section className="section">
+        <section className="section" id="reviews">
           <div className="wrap">
             <div className="section-head">
-              <h2>老客评价</h2>
-              <p>每次洗护完成后，我们会记录毛发、耳道、皮肤和情绪状态，方便下次护理延续。</p>
+              <h2>家长最关心的到店反馈</h2>
+              <p>先看洗后状态、胆小宠物配合度和造型沟通效果，再决定适合的洗护项目。</p>
             </div>
-            <div className="reviews">
-              {reviews.map((review) => (
-                <article className="review-card" key={review.name}>
-                  <div className="stars">★★★★★</div>
-                  <p>{review.text}</p>
-                  <div className="reviewer">
-                    <span className="avatar">{review.initial}</span>
-                    {review.name}
-                  </div>
-                </article>
-              ))}
+            <div className="review-carousel" aria-label="客户评价轮播">
+              <div className="reviews">
+                {reviewLoop.map((review, index) => (
+                  <article
+                    className="review-card"
+                    key={`${review.name}-${index}`}
+                    aria-hidden={index >= reviews.length}
+                  >
+                    <div>
+                      <div className="stars">★★★★★</div>
+                      <p>{review.text}</p>
+                    </div>
+                    <div>
+                      <span className="review-tag">{review.tag}</span>
+                      <div className="reviewer">
+                        <span className="avatar">{review.initial}</span>
+                        {review.name}
+                      </div>
+                    </div>
+                  </article>
+                ))}
+              </div>
             </div>
           </div>
         </section>
