@@ -20,32 +20,36 @@ const slots = [
   }
 ];
 
-const arrivalTimes = ["10:30", "12:00", "14:30", "16:00", "18:30"];
+const arrivalTimes = ["09:30", "10:30", "12:00", "14:30", "16:00", "18:30"];
+const defaultArrivalTime = "09:30";
+const arrivalDateLabel = "明天";
 
 export default function HeroAvailabilityPanel() {
-  const [selectedTime, setSelectedTime] = useState(arrivalTimes[2]);
+  const [selectedTime, setSelectedTime] = useState(defaultArrivalTime);
   const [contactName, setContactName] = useState("");
   const [contactPhone, setContactPhone] = useState("");
+
+  const selectedArrivalLabel = `${arrivalDateLabel} ${selectedTime}`;
 
   const arrivalHint = useMemo(() => {
     const [hour] = selectedTime.split(":").map(Number);
 
     if (hour < 12) {
-      return "上午到店，适合快洗和基础护理";
+      return "明天上午到店，适合快洗和基础护理";
     }
 
     if (hour < 17) {
-      return "下午余位更稳，适合洗护造型";
+      return "明天下午余位更稳，适合洗护造型";
     }
 
-    return "晚间时段，建议优先电话确认";
+    return "明日晚间时段，建议优先电话确认";
   }, [selectedTime]);
 
   return (
-    <aside className="hero-panel" aria-label="今日预约状态">
+    <aside className="hero-panel" aria-label="明日预约状态">
       <div className="status-row">
         <div>
-          <strong>今日余位</strong>
+          <strong>明日余位</strong>
           <p>建议提前 2 小时预约</p>
         </div>
         <span className="open-pill">
@@ -56,10 +60,10 @@ export default function HeroAvailabilityPanel() {
 
       <div className="quick-arrival" aria-labelledby="quick-arrival-title">
         <div className="quick-arrival-head">
-          <strong id="quick-arrival-title">快速到店时间</strong>
-          <span>{selectedTime} 到店</span>
+          <strong id="quick-arrival-title">期望到店日期</strong>
+          <span>{selectedArrivalLabel} 到店</span>
         </div>
-        <div className="arrival-options" role="list" aria-label="选择到店时间">
+        <div className="arrival-options" role="list" aria-label="选择期望到店日期">
           {arrivalTimes.map((time) => (
             <button
               className="arrival-chip"
@@ -68,7 +72,7 @@ export default function HeroAvailabilityPanel() {
               key={time}
               onClick={() => setSelectedTime(time)}
             >
-              {time}
+              {arrivalDateLabel} {time}
             </button>
           ))}
         </div>
@@ -111,7 +115,7 @@ export default function HeroAvailabilityPanel() {
       </div>
 
       <a className="panel-booking-btn" href="#booking">
-        预约 {selectedTime} 到店
+        预约 {selectedArrivalLabel} 到店
       </a>
     </aside>
   );
