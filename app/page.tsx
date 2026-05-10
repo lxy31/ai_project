@@ -234,6 +234,24 @@ export default function Home() {
               <p>猫犬独立等待区，工具高温消毒，吹水机分贝控制，敏感宠物可预约慢洗时段。</p>
             </div>
             <SpaceCarousel />
+            <div className="space-reviews">
+              <div className="section-head">
+                <h2>老客评价</h2>
+                <p>每次洗护完成后，我们会记录毛发、耳道、皮肤和情绪状态，方便下次护理延续。</p>
+              </div>
+              <div className="reviews">
+                {reviews.map((review) => (
+                  <article className="review-card" key={review.name}>
+                    <div className="stars">★★★★★</div>
+                    <p>{review.text}</p>
+                    <div className="reviewer">
+                      <span className="avatar">{review.initial}</span>
+                      {review.name}
+                    </div>
+                  </article>
+                ))}
+              </div>
+            </div>
           </div>
         </section>
 
@@ -329,26 +347,6 @@ export default function Home() {
           </div>
         </section>
 
-        <section className="section">
-          <div className="wrap">
-            <div className="section-head">
-              <h2>老客评价</h2>
-              <p>每次洗护完成后，我们会记录毛发、耳道、皮肤和情绪状态，方便下次护理延续。</p>
-            </div>
-            <div className="reviews">
-              {reviews.map((review) => (
-                <article className="review-card" key={review.name}>
-                  <div className="stars">★★★★★</div>
-                  <p>{review.text}</p>
-                  <div className="reviewer">
-                    <span className="avatar">{review.initial}</span>
-                    {review.name}
-                  </div>
-                </article>
-              ))}
-            </div>
-          </div>
-        </section>
       </main>
 
       <footer>

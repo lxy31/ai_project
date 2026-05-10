@@ -24,6 +24,8 @@ const arrivalTimes = ["10:30", "12:00", "14:30", "16:00", "18:30"];
 
 export default function HeroAvailabilityPanel() {
   const [selectedTime, setSelectedTime] = useState(arrivalTimes[2]);
+  const [contactName, setContactName] = useState("");
+  const [contactPhone, setContactPhone] = useState("");
 
   const arrivalHint = useMemo(() => {
     const [hour] = selectedTime.split(":").map(Number);
@@ -83,6 +85,29 @@ export default function HeroAvailabilityPanel() {
             <b>{slot.count}</b>
           </div>
         ))}
+      </div>
+
+      <div className="quick-contact" aria-label="联系人信息">
+        <label>
+          <span>联系人</span>
+          <input
+            type="text"
+            value={contactName}
+            placeholder="怎么称呼"
+            autoComplete="name"
+            onChange={(event) => setContactName(event.target.value)}
+          />
+        </label>
+        <label>
+          <span>联系电话</span>
+          <input
+            type="tel"
+            value={contactPhone}
+            placeholder="手机号"
+            autoComplete="tel"
+            onChange={(event) => setContactPhone(event.target.value)}
+          />
+        </label>
       </div>
 
       <a className="panel-booking-btn" href="#booking">
