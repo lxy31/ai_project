@@ -54,6 +54,29 @@ export default function HeroAvailabilityPanel() {
         </span>
       </div>
 
+      <div className="quick-contact" aria-label="联系人信息">
+        <label>
+          <span>联系人</span>
+          <input
+            type="text"
+            value={contactName}
+            placeholder="怎么称呼"
+            autoComplete="name"
+            onChange={(event) => setContactName(event.target.value)}
+          />
+        </label>
+        <label>
+          <span>联系电话</span>
+          <input
+            type="tel"
+            value={contactPhone}
+            placeholder="手机号"
+            autoComplete="tel"
+            onChange={(event) => setContactPhone(event.target.value)}
+          />
+        </label>
+      </div>
+
       <div className="quick-arrival" aria-labelledby="quick-arrival-title">
         <div className="quick-arrival-head">
           <strong id="quick-arrival-title">快速到店时间</strong>
@@ -85,29 +108,6 @@ export default function HeroAvailabilityPanel() {
             <b>{slot.count}</b>
           </div>
         ))}
-      </div>
-
-      <div className="quick-contact" aria-label="联系人信息">
-        <label>
-          <span>联系人</span>
-          <input
-            type="text"
-            value={contactName}
-            placeholder="怎么称呼"
-            autoComplete="name"
-            onChange={(event) => setContactName(event.target.value)}
-          />
-        </label>
-        <label>
-          <span>联系电话</span>
-          <input
-            type="tel"
-            value={contactPhone}
-            placeholder="手机号"
-            autoComplete="tel"
-            onChange={(event) => setContactPhone(event.target.value)}
-          />
-        </label>
       </div>
 
       <a className="panel-booking-btn" href="#booking">

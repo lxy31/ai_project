@@ -789,20 +789,50 @@ h1 {
   flex-wrap: wrap;
 }
 
+.review-carousel {
+  overflow: hidden;
+  padding: 4px 0 18px;
+  -webkit-mask-image: linear-gradient(90deg, transparent, #000 7%, #000 93%, transparent);
+  mask-image: linear-gradient(90deg, transparent, #000 7%, #000 93%, transparent);
+}
+
 .reviews {
-  display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
+  width: max-content;
+  display: flex;
   gap: 18px;
+  animation: review-scroll 42s linear infinite;
+  will-change: transform;
+}
+
+.review-carousel:hover .reviews {
+  animation-play-state: paused;
 }
 
 .review-card {
+  width: clamp(286px, 30vw, 372px);
+  min-height: 252px;
   padding: 22px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
 }
 
 .stars {
   color: #d9981d;
   font-weight: 900;
   letter-spacing: 0;
+}
+
+.review-tag {
+  display: inline-flex;
+  align-items: center;
+  min-height: 30px;
+  padding: 0 10px;
+  color: var(--mint-dark);
+  background: #e6f4f1;
+  border-radius: 999px;
+  font-size: 13px;
+  font-weight: 800;
 }
 
 .reviewer {
@@ -822,6 +852,16 @@ h1 {
   background: var(--blue);
   border-radius: 50%;
   font-size: 15px;
+}
+
+@keyframes review-scroll {
+  from {
+    transform: translateX(0);
+  }
+
+  to {
+    transform: translateX(calc(-50% - 9px));
+  }
 }
 
 footer {
@@ -860,8 +900,7 @@ footer {
   }
 
   .service-grid,
-  .price-grid,
-  .reviews {
+  .price-grid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 
@@ -900,9 +939,18 @@ footer {
 
   .service-grid,
   .price-grid,
-  .booking-info,
-  .reviews {
+  .booking-info {
     grid-template-columns: 1fr;
+  }
+
+  .review-carousel {
+    padding-bottom: 10px;
+    -webkit-mask-image: none;
+    mask-image: none;
+  }
+
+  .review-card {
+    width: min(82vw, 320px);
   }
 
   .slots,
