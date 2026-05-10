@@ -1,24 +1,9 @@
 "use client";
 
-import { useState } from "react";
+import { type FormEvent, useState } from "react";
 
-const slots = [
-  {
-    title: "小型犬快洗",
-    note: "预计 70 分钟",
-    count: "2 位"
-  },
-  {
-    title: "猫咪舒缓洗护",
-    note: "独立安静房",
-    count: "1 位"
-  },
-  {
-    title: "全身精修",
-    note: "需洗前评估",
-    count: "3 位"
-  }
-];
+const petTypes = ["小型犬", "中大型犬", "猫咪"];
+const serviceOptions = ["基础洗护", "精致护理洗", "洗护造型套"];
 
 function getDefaultArrivalValue() {
   const tomorrow = new Date();
@@ -47,15 +32,65 @@ export default function HeroAvailabilityPanel() {
   const [arrivalValue, setArrivalValue] = useState(getDefaultArrivalValue);
   const [contactName, setContactName] = useState("");
   const [contactPhone, setContactPhone] = useState("");
+  const [petType, setPetType] = useState(petTypes[0]);
+  const [serviceName, setServiceName] = useState(serviceOptions[0]);
+  const [note, setNote] = useState("");
+  const [submitState, setSubmitState] = useState<"idle" | "submitting" | "success" | "error">("idle");
+  const [submitMessage, setSubmitMessage] = useState("");
 
   const selectedArrivalLabel = formatArrivalLabel(arrivalValue);
+  const isSubmitting = submitState === "submitting";
+
+  async function handleSubmit(event: FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+
+    const trimmedName = contactName.trim();
+    const trimmedPhone = contactPhone.trim();
+
+    if (!trimmedName || !trimmedPhone || !arrivalValue) {
+      setSubmitState("error");
+      setSubmitMessage("请先填写联系人、联系电话和到店时间。");
+      return;
+    }
+
+    setSubmitState("submitting");
+    setSubmitMessage("");
+
+    try {
+      const response = await fetch("/api/appointments", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+          contactName: trimmedName,
+          contactPhone: trimmedPhone,
+          desiredArrivalAt: new Date(arrivalValue).toISOString(),
+          serviceName,
+          petType,
+          note
+        })
+      });
+
+      if (!response.ok) {
+        const result = (await response.json().catch(() => null)) as { message?: string } | null;
+        throw new Error(result?.message ?? "预约暂时提交失败，请稍后再试。");
+      }
+
+      setSubmitState("success");
+      setSubmitMessage("预约已提交，店员会尽快联系你确认。");
+    } catch (error) {
+      setSubmitState("error");
+      setSubmitMessage(error instanceof Error ? error.message : "预约暂时提交失败，请稍后再试。");
+    }
+  }
 
   return (
-    <aside className="hero-panel" aria-label="明日预约状态">
+    <form className="hero-panel" aria-label="快速预约" onSubmit={handleSubmit}>
       <div className="status-row">
         <div>
-          <strong>明日余位</strong>
-          <p>建议提前 2 小时预约</p>
+          <strong>快速预约</strong>
+          <p>填写后店员会尽快确认</p>
         </div>
         <span className="open-pill">
           <i className="dot" aria-hidden="true" />
@@ -71,6 +106,8 @@ export default function HeroAvailabilityPanel() {
             value={contactName}
             placeholder="怎么称呼"
             autoComplete="name"
+            required
+            maxLength={50}
             onChange={(event) => setContactName(event.target.value)}
           />
         </label>
@@ -81,42 +118,78 @@ export default function HeroAvailabilityPanel() {
             value={contactPhone}
             placeholder="手机号"
             autoComplete="tel"
+            required
+            maxLength={30}
             onChange={(event) => setContactPhone(event.target.value)}
           />
         </label>
       </div>
 
-      <div className="quick-arrival" aria-labelledby="quick-arrival-title">
-        <div className="quick-arrival-head">
-          <strong id="quick-arrival-title">期望到店日期</strong>
-          <span>{selectedArrivalLabel} 到店</span>
-        </div>
-        <label className="arrival-field">
+      <div className="quick-contact single" aria-label="到店时间">
+        <label>
           <span>到店时间</span>
           <input
             type="datetime-local"
             value={arrivalValue}
+            required
             onChange={(event) => setArrivalValue(event.target.value)}
           />
         </label>
-        <p>可直接填写或选择日期与时间，店员会按此时间联系确认。</p>
       </div>
 
-      <div className="slots">
-        {slots.map((slot) => (
-          <div className="slot" key={slot.title}>
-            <div>
-              <strong>{slot.title}</strong>
-              <span>{slot.note}</span>
-            </div>
-            <b>{slot.count}</b>
-          </div>
-        ))}
+      <div className="choice-group" aria-label="宠物类型">
+        <span>宠物类型</span>
+        <div className="choice-options">
+          {petTypes.map((type) => (
+            <button
+              className="choice-chip"
+              type="button"
+              aria-pressed={petType === type}
+              key={type}
+              onClick={() => setPetType(type)}
+            >
+              {type}
+            </button>
+          ))}
+        </div>
       </div>
 
-      <a className="panel-booking-btn" href="#booking">
-        预约 {selectedArrivalLabel} 到店
-      </a>
-    </aside>
+      <div className="choice-group" aria-label="服务项目">
+        <span>服务项目</span>
+        <div className="choice-options">
+          {serviceOptions.map((option) => (
+            <button
+              className="choice-chip"
+              type="button"
+              aria-pressed={serviceName === option}
+              key={option}
+              onClick={() => setServiceName(option)}
+            >
+              {option}
+            </button>
+          ))}
+        </div>
+      </div>
+
+      <label className="note-field">
+        <span>备注</span>
+        <textarea
+          value={note}
+          placeholder="宠物名字、体型、接送需求或特别注意"
+          maxLength={500}
+          rows={3}
+          onChange={(event) => setNote(event.target.value)}
+        />
+      </label>
+
+      <button className="panel-booking-btn" type="submit" disabled={isSubmitting}>
+        {isSubmitting ? "正在提交..." : `预约 ${selectedArrivalLabel} 到店`}
+      </button>
+      {submitMessage ? (
+        <p className={`submit-message ${submitState === "success" ? "success" : "error"}`} role="status">
+          {submitMessage}
+        </p>
+      ) : null}
+    </form>
   );
 }
