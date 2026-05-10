@@ -543,21 +543,24 @@
 
     .booking {
       display: grid;
-      grid-template-columns: 0.95fr 1.05fr;
-      gap: 44px;
+      grid-template-columns: 1fr;
+      gap: 28px;
       align-items: start;
     }
 
     .booking-info {
       display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
       gap: 18px;
     }
 
     .info-line {
       display: flex;
       gap: 14px;
-      padding: 18px 0;
-      border-bottom: 1px solid rgba(32, 33, 36, 0.12);
+      padding: 18px;
+      background: var(--white);
+      border: 1px solid var(--line);
+      border-radius: 8px;
     }
 
     .info-line .icon {
@@ -590,14 +593,15 @@
 
     .store-map {
       position: relative;
-      min-height: 430px;
+      aspect-ratio: 3 / 2;
+      min-height: 520px;
       margin-top: 22px;
       overflow: hidden;
       border: 1px solid var(--line);
       border-radius: 8px;
       background:
         linear-gradient(180deg, rgba(255, 255, 255, 0.06), rgba(255, 255, 255, 0.22)),
-        url("assets/pet-store-map.png") center / cover;
+        url("assets/pet-store-map.png") center / contain no-repeat;
     }
 
     .map-pin {
@@ -771,6 +775,7 @@
 
       .service-grid,
       .price-grid,
+      .booking-info,
       .reviews {
         grid-template-columns: 1fr;
       }
@@ -804,7 +809,7 @@
       }
 
       .store-map {
-        min-height: 330px;
+        min-height: 0;
       }
     }
   </style>
