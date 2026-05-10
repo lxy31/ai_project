@@ -1,4 +1,5 @@
 import Image from "next/image";
+import HeroAvailabilityPanel from "@/components/HeroAvailabilityPanel";
 import SpaceCarousel from "@/components/SpaceCarousel";
 
 function HeartMark() {
@@ -198,41 +199,7 @@ export default function Home() {
                 </a>
               </div>
             </div>
-            <aside className="hero-panel" aria-label="今日预约状态">
-              <div className="status-row">
-                <div>
-                  <strong>今日余位</strong>
-                  <p>建议提前 2 小时预约</p>
-                </div>
-                <span className="open-pill">
-                  <i className="dot" aria-hidden="true" />
-                  营业中
-                </span>
-              </div>
-              <div className="slots">
-                <div className="slot">
-                  <div>
-                    <strong>小型犬快洗</strong>
-                    <span>预计 70 分钟</span>
-                  </div>
-                  <b>2 位</b>
-                </div>
-                <div className="slot">
-                  <div>
-                    <strong>猫咪舒缓洗护</strong>
-                    <span>独立安静房</span>
-                  </div>
-                  <b>1 位</b>
-                </div>
-                <div className="slot">
-                  <div>
-                    <strong>全身精修</strong>
-                    <span>需洗前评估</span>
-                  </div>
-                  <b>3 位</b>
-                </div>
-              </div>
-            </aside>
+            <HeroAvailabilityPanel />
           </div>
         </section>
 
