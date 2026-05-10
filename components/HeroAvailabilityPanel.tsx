@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useState } from "react";
 
 const slots = [
   {
@@ -20,30 +20,35 @@ const slots = [
   }
 ];
 
-const arrivalTimes = ["09:30", "10:30", "12:00", "14:30", "16:00", "18:30"];
-const defaultArrivalTime = "09:30";
-const arrivalDateLabel = "明天";
+function getDefaultArrivalValue() {
+  const tomorrow = new Date();
+  tomorrow.setDate(tomorrow.getDate() + 1);
+  tomorrow.setHours(9, 30, 0, 0);
+
+  const year = tomorrow.getFullYear();
+  const month = String(tomorrow.getMonth() + 1).padStart(2, "0");
+  const day = String(tomorrow.getDate()).padStart(2, "0");
+
+  return `${year}-${month}-${day}T09:30`;
+}
+
+function formatArrivalLabel(value: string) {
+  if (!value) {
+    return "待填写";
+  }
+
+  const [date = "", time = ""] = value.split("T");
+  const [, month = "", day = ""] = date.split("-");
+
+  return `${month}月${day}日 ${time}`;
+}
 
 export default function HeroAvailabilityPanel() {
-  const [selectedTime, setSelectedTime] = useState(defaultArrivalTime);
+  const [arrivalValue, setArrivalValue] = useState(getDefaultArrivalValue);
   const [contactName, setContactName] = useState("");
   const [contactPhone, setContactPhone] = useState("");
 
-  const selectedArrivalLabel = `${arrivalDateLabel} ${selectedTime}`;
-
-  const arrivalHint = useMemo(() => {
-    const [hour] = selectedTime.split(":").map(Number);
-
-    if (hour < 12) {
-      return "明天上午到店，适合快洗和基础护理";
-    }
-
-    if (hour < 17) {
-      return "明天下午余位更稳，适合洗护造型";
-    }
-
-    return "明日晚间时段，建议优先电话确认";
-  }, [selectedTime]);
+  const selectedArrivalLabel = formatArrivalLabel(arrivalValue);
 
   return (
     <aside className="hero-panel" aria-label="明日预约状态">
@@ -86,20 +91,15 @@ export default function HeroAvailabilityPanel() {
           <strong id="quick-arrival-title">期望到店日期</strong>
           <span>{selectedArrivalLabel} 到店</span>
         </div>
-        <div className="arrival-options" role="list" aria-label="选择期望到店日期">
-          {arrivalTimes.map((time) => (
-            <button
-              className="arrival-chip"
-              type="button"
-              aria-pressed={selectedTime === time}
-              key={time}
-              onClick={() => setSelectedTime(time)}
-            >
-              {arrivalDateLabel} {time}
-            </button>
-          ))}
-        </div>
-        <p>{arrivalHint}</p>
+        <label className="arrival-field">
+          <span>到店时间</span>
+          <input
+            type="datetime-local"
+            value={arrivalValue}
+            onChange={(event) => setArrivalValue(event.target.value)}
+          />
+        </label>
+        <p>可直接填写或选择日期与时间，店员会按此时间联系确认。</p>
       </div>
 
       <div className="slots">
